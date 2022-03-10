@@ -11,7 +11,7 @@ function Card({
 
   return (
     <div className="element">
-      <img className="element__photo" src = {card.link} 
+      <img className="element__photo" src = {card.link} alt = {card.name}
       onClick={handleClick}/>
       <div className="element__info">
         <h2 className="element__title">{card.name}</h2>

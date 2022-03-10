@@ -1,20 +1,18 @@
 import React, { useEffect, useState } from 'react';
-import './index.css'
-import Header from './components/Header';
-import Main from './components/Main';
-import Footer from './components/Footer';
-import PopupWithForm from './components/PopupWithForm';
-import ImagePopup from './components/ImagePopup';
-import api from './utils/api';
+import '../index.css'
+import Header from './Header';
+import Main from './Main';
+import Footer from './Footer';
+import PopupWithForm from './PopupWithForm';
+import ImagePopup from './ImagePopup';
+import api from '../utils/api';
 
 function App() {
 
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
   const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false);
-  const [user, setUser] = useState({});
-  const [cards, setCards] = useState([]);
-  const [selectedCard, setSelectedCard] = useState({name: "", link: ""});
+  const [selectedCard, setSelectedCard] = useState({ name: "", link: "" });
 
   function handleEditAvatarClick() {
     setIsEditAvatarPopupOpen(true);
@@ -29,59 +27,34 @@ function App() {
   }
 
   function handleCardClick(data) {
-    setSelectedCard({name: data.name, link: data.link});
+    setSelectedCard({ name: data.name, link: data.link });
   }
 
   function closeAllPopups() {
     setIsEditAvatarPopupOpen(false);
     setIsEditProfilePopupOpen(false);
     setIsAddPlacePopupOpen(false);
-    setSelectedCard({name: "", link: ""});
+    setSelectedCard({ name: "", link: "" });
   }
 
-  useEffect(() => {
-    api.getProfileInfo()
-      .then((user) => {
-        setUser(user)
-      })
-  }, [])
-
-  useEffect(() => {
-    api.getCards()
-      .then((res) => {
-        setCards(
-          res
-        )
-      }
-      )
-  }
-  );
 
   return (
     <div className="App">
       <div className="root">
-        <div>
-          <meta charSet="UTF-8" />
-          <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-          <title>Mesto</title>
-        </div>
         <Header />
         <Main
           onEditProfile={handleEditProfileClick}
           onAddPlace={handleAddClick}
           onEditAvatar={handleEditAvatarClick}
-          userName={user.name}
-          userDescription={user.about}
-          userAvatar={user.avatar}
-          cards={cards}
           onCardClick={handleCardClick}
-          >
+        >
         </Main>
         <Footer />
 
         <PopupWithForm
           name="edit"
           title="Редактировать профиль"
+          buttonText="Сохранить"
           isOpen={isEditProfilePopupOpen}
           onClose={closeAllPopups}>
 
@@ -96,6 +69,7 @@ function App() {
         <PopupWithForm
           name="add"
           title="Новое место"
+          buttonText="Создать"
           isOpen={isAddPlacePopupOpen}
           onClose={closeAllPopups}>
 
@@ -111,6 +85,7 @@ function App() {
         <PopupWithForm
           name="delete"
           title="Вы уверены?"
+          buttonText="Да"
           onClose={closeAllPopups}>
         </PopupWithForm>
 
@@ -118,6 +93,7 @@ function App() {
         <PopupWithForm
           name="avatar"
           title="Обновить аватар"
+          buttonText="Сохранить"
           isOpen={isEditAvatarPopupOpen}
           onClose={closeAllPopups}>
           <input className="field field_type_link popup__input popup-avatar__input" id="popup-avatar__input_link"
@@ -126,8 +102,8 @@ function App() {
         </PopupWithForm>
 
         <ImagePopup
-          card = {selectedCard}
-          onClose = {closeAllPopups}
+          card={selectedCard}
+          onClose={closeAllPopups}
         ></ImagePopup>
 
       </div>
@@ -135,4 +111,4 @@ function App() {
   );
 }
 
-export default App;
+export default App
