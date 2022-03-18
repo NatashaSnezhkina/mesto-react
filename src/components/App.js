@@ -5,6 +5,7 @@ import Main from './Main';
 import Footer from './Footer';
 import PopupWithForm from './PopupWithForm';
 import ImagePopup from './ImagePopup';
+import EditProfilePopup from '../components/EditProfilePopup';
 import api from '../utils/api';
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
 import { CardsContext } from '../contexts/CardsContext';
@@ -41,6 +42,19 @@ function App() {
     setSelectedCard({ name: "", link: "" });
   }
 
+  function handleUpdateUser(currentUser) {
+    api.sendProfileInfo(currentUser)
+      .then((res) => {
+        setCurrentUser(res);
+        setIsEditProfilePopupOpen(false);
+      })
+      .catch(err => {
+        console.log(err => {
+          console.log(err);
+        })
+      })
+  }
+
   useEffect(() => {
     api.getProfileInfo()
       .then((currentUser) => {
@@ -72,76 +86,66 @@ function App() {
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <CardsContext.Provider value={cards}>
-      <div className="App">
-        <div className="root">
-          <Header />
-          <Main
-            onEditProfile={handleEditProfileClick}
-            onAddPlace={handleAddClick}
-            onEditAvatar={handleEditAvatarClick}
-            onCardClick={handleCardClick}
-            setCards={setCards}
-          >
-          </Main>
-          <Footer />
+        <div className="App">
+          <div className="root">
+            <Header />
+            <Main
+              onEditProfile={handleEditProfileClick}
+              onAddPlace={handleAddClick}
+              onEditAvatar={handleEditAvatarClick}
+              onCardClick={handleCardClick}
+              setCards={setCards}
+            >
+            </Main>
+            <Footer />
 
-          <PopupWithForm
-            name="edit"
-            title="Редактировать профиль"
-            buttonText="Сохранить"
-            isOpen={isEditProfilePopupOpen}
-            onClose={closeAllPopups}>
+            <EditProfilePopup
+              isOpen={isEditProfilePopupOpen}
+              onClose={closeAllPopups}
+              onUpdateUser={handleUpdateUser} />
 
-            <input className="field field_type_name popup__input"
-              type="text" name="name" id="popup-${name}__input_name" placeholder="Имя" required minLength="2" maxLength="40" />
-            <span id="popup-edit__input_name-error" className="error"></span>
-            <input className="field field_type_description popup__input" type="text" id="popup-edit__input_description" name="about"
-              placeholder="Описание" required minLength="2" maxLength="200" />
-            <span id="popup-edit__input_description-error" className="error"></span>
-          </PopupWithForm>
+            <PopupWithForm
+              name="add"
+              title="Новое место"
+              buttonText="Создать"
+              isOpen={isAddPlacePopupOpen}
+              onClose={closeAllPopups}>
 
-          <PopupWithForm
-            name="add"
-            title="Новое место"
-            buttonText="Создать"
-            isOpen={isAddPlacePopupOpen}
-            onClose={closeAllPopups}>
-
-            <input className="field field_type_title popup__input" id="popup-add__input_title"
-              type="text" name="name" placeholder="Название" required minLength="2" maxLength="30" />
-            <span id="popup-add__input_title-error" className="error"></span>
-            <input className="field field_type_link popup__input" id="popup-add__input_link"
-              type="url" name="link" placeholder="Ссылка на картинку" required />
-            <span id="popup-add__input_link-error" className="error"></span>
-          </PopupWithForm>
+              <input className="field field_type_title popup__input" id="popup-add__input_title"
+                type="text" name="name" placeholder="Название" required minLength="2" maxLength="30" />
+              <span id="popup-add__input_title-error" className="error"></span>
+              <input className="field field_type_link popup__input" id="popup-add__input_link"
+                type="url" name="link" placeholder="Ссылка на картинку" required />
+              <span id="popup-add__input_link-error" className="error"></span>
+            </PopupWithForm>
 
 
-          <PopupWithForm
-            name="delete"
-            title="Вы уверены?"
-            buttonText="Да"
-            onClose={closeAllPopups}>
-          </PopupWithForm>
+            <PopupWithForm
+              name="delete"
+              title="Вы уверены?"
+              buttonText="Да"
+              onClose={closeAllPopups}>
+            </PopupWithForm>
 
 
-          <PopupWithForm
-            name="avatar"
-            title="Обновить аватар"
-            buttonText="Сохранить"
-            isOpen={isEditAvatarPopupOpen}
-            onClose={closeAllPopups}>
-            <input className="field field_type_link popup__input popup-avatar__input" id="popup-avatar__input_link"
-              type="url" name="avatar" placeholder="Ссылка на картинку" required />
-            <span id="popup-avatar__input_link-error" className="error"></span>
-          </PopupWithForm>
+            <PopupWithForm
+              name="avatar"
+              title="Обновить аватар"
+              buttonText="Сохранить"
+              isOpen={isEditAvatarPopupOpen}
+              onClose={closeAllPopups}>
+              <input className="field field_type_link popup__input popup-avatar__input" id="popup-avatar__input_link"
+                type="url" name="avatar" placeholder="Ссылка на картинку" required />
+              <span id="popup-avatar__input_link-error" className="error"></span>
+            </PopupWithForm>
 
-          <ImagePopup
-            card={selectedCard}
-            onClose={closeAllPopups}
-          ></ImagePopup>
+            <ImagePopup
+              card={selectedCard}
+              onClose={closeAllPopups}
+            ></ImagePopup>
 
-        </div>
-      </div >
+          </div>
+        </div >
       </CardsContext.Provider>
     </CurrentUserContext.Provider>
   );

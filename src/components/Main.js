@@ -12,8 +12,8 @@ function Main({
   setCards
 }) {
 
-  const currentUser = React.useContext(CurrentUserContext);
-  const cards = React.useContext(CardsContext);
+  const currentUser = useContext(CurrentUserContext);
+  const cards = useContext(CardsContext);
 
   function handleCardLike(card) {
     const isLiked = card.likes.some(i => i._id === currentUser._id);
@@ -44,7 +44,7 @@ function Main({
       <section className="profile">
         <div className="profile__avatar-container">
           <div className="profile__avatar-overlay profile__avatar-overlay_closed"></div>
-          <img className="profile__avatar" src={currentUser.avatar} onClick={onEditAvatar} />
+          <img className="profile__avatar" src={currentUser.avatar} onClick={onEditAvatar} alt={currentUser.name}/>
         </div>
         <div className="profile__info">
           <div className="profile__main-info">
