@@ -31,7 +31,7 @@ function Card({
           <p className="element__like__counter">{card.likes.length}</p>
         </div>
       </div>
-      <button className= {` ${isOwn ? 'element__basket' : ''}`} type="button" aria-label="корзина" ocClick={onCardDelete}></button>
+      <button className= {` ${isOwn ? 'element__basket' : ''}`} type="button" aria-label="корзина" onClick={onCardDelete}></button>
     </div>
   )
 }

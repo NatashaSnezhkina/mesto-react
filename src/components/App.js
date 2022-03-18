@@ -6,6 +6,7 @@ import Footer from './Footer';
 import PopupWithForm from './PopupWithForm';
 import ImagePopup from './ImagePopup';
 import EditProfilePopup from '../components/EditProfilePopup';
+import EditAvatarPopup from '../components/EditAvatarPopup';
 import api from '../utils/api';
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
 import { CardsContext } from '../contexts/CardsContext';
@@ -53,6 +54,19 @@ function App() {
           console.log(err);
         })
       })
+  }
+
+  function handleUpdateAvatar(currentUser) {
+    api.sendAvatar(currentUser)
+    .then((res) => {
+      setCurrentUser(res);
+      setIsEditAvatarPopupOpen(false);
+    })
+    .catch(err => {
+      console.log(err => {
+        console.log(err);
+      })
+    })
   }
 
   useEffect(() => {
@@ -104,6 +118,11 @@ function App() {
               onClose={closeAllPopups}
               onUpdateUser={handleUpdateUser} />
 
+            <EditAvatarPopup
+              isOpen={isEditAvatarPopupOpen}
+              onClose={closeAllPopups} 
+              onUpdateAvatar={handleUpdateAvatar}/>
+
             <PopupWithForm
               name="add"
               title="Новое место"
@@ -125,18 +144,6 @@ function App() {
               title="Вы уверены?"
               buttonText="Да"
               onClose={closeAllPopups}>
-            </PopupWithForm>
-
-
-            <PopupWithForm
-              name="avatar"
-              title="Обновить аватар"
-              buttonText="Сохранить"
-              isOpen={isEditAvatarPopupOpen}
-              onClose={closeAllPopups}>
-              <input className="field field_type_link popup__input popup-avatar__input" id="popup-avatar__input_link"
-                type="url" name="avatar" placeholder="Ссылка на картинку" required />
-              <span id="popup-avatar__input_link-error" className="error"></span>
             </PopupWithForm>
 
             <ImagePopup
