@@ -18,12 +18,24 @@ function Main({
   function handleCardLike(card) {
     const isLiked = card.likes.some(i => i._id === currentUser._id);
 
-    api.changeLikeCardStatus(card._id, !isLiked).then((newCard) => {
+    api.changeLikeCardStatus(card._id, !isLiked)
+    .then((newCard) => {
       setCards((state) => state.map((c) => c._id === card._id ? newCard : c));
+    })
+    .catch(err => {
+      console.log(`Ошибка при удалении лайка${err}`);
     });
   }
 
   function handleCardDelete(card) {
+    
+    api.deleteCard(card._id)
+    .then((deletedCard) => {
+      setCards((state) => state.filter((c) => c._id !== deletedCard._id));
+    })
+    .catch(err => {
+      console.log(`Ошибка при удалении карточки${err}`);
+    })
 
   }
 
