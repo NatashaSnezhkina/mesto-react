@@ -86,9 +86,9 @@ class Api {
     .then(this._responseProcessing())
   }
 
-  addLike(cardId) {
+  changeLikeCardStatus(cardId, isLiked) {
     return fetch (`${this._address}/cards/${cardId}/likes`, {
-      method: 'PUT',
+      method: isLiked ? 'PUT' : 'DELETE',
       headers: {
         authorization: this._token,
         'Content-Type': 'application/json'
@@ -96,18 +96,6 @@ class Api {
     })
     .then(this._responseProcessing())
   }
-
-  deleteLike(cardId) {
-    return fetch (`${this._address}/cards/${cardId}/likes`, {
-      method: 'DELETE',
-      headers: {
-        authorization: this._token,
-        'Content-Type': 'application/json'
-      },
-    })
-    .then(this._responseProcessing())
-  }
-
 }
 
 const api = new Api({

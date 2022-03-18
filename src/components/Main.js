@@ -1,62 +1,45 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import Card from './Card';
+import { CurrentUserContext } from '../contexts/CurrentUserContext';
+import { CardsContext } from '../contexts/CardsContext';
 import api from '../utils/api';
 
 function Main({
   onEditProfile,
   onAddPlace,
   onEditAvatar,
-  // userName,
-  // userDescription,
-  // userAvatar,
-  // cards,
-  onCardClick
+  onCardClick,
+  setCards
 }) {
 
-  const [user, setUser] = useState({});
-  const [cards, setCards] = useState([]);
+  const currentUser = React.useContext(CurrentUserContext);
+  const cards = React.useContext(CardsContext);
 
-  useEffect(() => {
-    api.getProfileInfo()
-      .then((user) => {
-        setUser(user)
-      })
-      .catch(err => {
-        console.log(err => {
-          console.log(err);
-        })
-      })
-  }, [])
+  function handleCardLike(card) {
+    const isLiked = card.likes.some(i => i._id === currentUser._id);
 
-  useEffect(() => {
-    api.getCards()
-      .then((res) => {
-        setCards(
-          res
-        )
-      }
-      )
-      .catch(err => {
-        console.log(err => {
-          console.log(err);
-        })
-      })
-  }, []);
+    api.changeLikeCardStatus(card._id, !isLiked).then((newCard) => {
+      setCards((state) => state.map((c) => c._id === card._id ? newCard : c));
+    });
+  }
 
+  function handleCardDelete(card) {
+
+  }
 
   return (
     <main>
       <section className="profile">
         <div className="profile__avatar-container">
           <div className="profile__avatar-overlay profile__avatar-overlay_closed"></div>
-          <img className="profile__avatar" src={user.avatar} onClick={onEditAvatar} />
+          <img className="profile__avatar" src={currentUser.avatar} onClick={onEditAvatar} />
         </div>
         <div className="profile__info">
           <div className="profile__main-info">
-            <h1 className="profile__title">{user.name}</h1>
+            <h1 className="profile__title">{currentUser.name}</h1>
             <button className="edit-button" type="button" aria-label="редактировать" onClick={onEditProfile}></button>
           </div>
-          <p className="profile__subtitle">{user.about}</p>
+          <p className="profile__subtitle">{currentUser.about}</p>
         </div>
         <button className="add-button" type="button" aria-label="добавить" onClick={onAddPlace}></button>
       </section>
@@ -67,6 +50,9 @@ function Main({
           key={card._id}
           card={card}
           onCardClick={onCardClick}
+          currentUser={currentUser}
+          onCardLike={handleCardLike}
+          onCardDelete={handleCardDelete}
         />))}
 
       </section>
