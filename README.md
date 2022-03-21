@@ -1,39 +1,30 @@
-# Проект: Место (В процессе)
+# Project «Mesto»
 
-### Обзор
-* Функционал
-* Технологии
-* Настройки
-* В планах
-* Ссылка на сайт
+## Content
+* [General](#General)
+* [Technologies](#Technologies)
+* [Settings](#Settings)
+* [Link](#Link)
 
-**Функционал**
+**General**
 
-Cервис Mesto: интерактивная страница. 
-* Удаление/добавление карточек.
-* Постановка лайков.
-* Редактирование информации о профиле.
-* Изменение фотографии профиля.
+This project allows people to share beautiful places.
+Functional: add/delete cards, like cards, editing profile info and changing profile photo.
 
+**Technologies**
+* flexbox layout
+* grid
+* BEM Nested
+* Implementation of popups
+* Server connection
+* webpack
 
-**Технологии**
-* Flexbox верстка
-* Grid
-* Адаптивная верстка
-* Реализованы попапы
-* Организация файлов выполнена по БЭМ Nested
-
-**Настройки**
+**Settings**
 * HTML 5
 * CSS
 * JavaScript
 * React.js
 
-**В планах**
-* Валидация форм
-* Редактирование информации
-* Добавление/удаление карточки
-
-**Ссылка на сайт** 
+**Link** 
 
 https://natashasnezhkina.github.io/mesto/
