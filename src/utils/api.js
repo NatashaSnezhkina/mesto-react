@@ -1,5 +1,5 @@
 class Api {
-  constructor ({address, token}) {
+  constructor({ address, token }) {
     this._address = address;
     this._token = token;
   }
@@ -14,16 +14,16 @@ class Api {
   }
 
   getCards() {
-    return fetch (`${this._address}/cards`, {
+    return fetch(`${this._address}/cards`, {
       headers: {
         authorization: this._token
       }
     })
-    .then(this._responseProcessing())
+      .then(this._responseProcessing())
   }
 
   sendCard(data) {
-    return fetch (`${this._address}/cards`, {
+    return fetch(`${this._address}/cards`, {
       method: 'POST',
       headers: {
         authorization: this._token,
@@ -34,20 +34,20 @@ class Api {
         link: data.link
       })
     })
-    .then(this._responseProcessing())
+      .then(this._responseProcessing())
   }
 
   getProfileInfo() {
-    return fetch (`${this._address}/users/me`, {
+    return fetch(`${this._address}/users/me`, {
       headers: {
         authorization: this._token
       }
     })
-    .then(this._responseProcessing())
+      .then(this._responseProcessing())
   }
 
   sendProfileInfo(data) {
-    return fetch (`${this._address}/users/me`, {
+    return fetch(`${this._address}/users/me`, {
       method: 'PATCH',
       headers: {
         authorization: this._token,
@@ -58,11 +58,11 @@ class Api {
         about: data.about,
       })
     })
-    .then(this._responseProcessing())
+      .then(this._responseProcessing())
   }
 
   sendAvatar(data) {
-    return fetch (`${this._address}/users/me/avatar`, {
+    return fetch(`${this._address}/users/me/avatar`, {
       method: 'PATCH',
       headers: {
         authorization: this._token,
@@ -72,29 +72,29 @@ class Api {
         avatar: data.avatar
       })
     })
-    .then(this._responseProcessing())
+      .then(this._responseProcessing())
   }
 
   deleteCard(cardId) {
-    return fetch (`${this._address}/cards/${cardId}`, {
+    return fetch(`${this._address}/cards/${cardId}`, {
       method: 'DELETE',
       headers: {
         authorization: this._token,
         'Content-Type': 'application/json'
       },
     })
-    .then(this._responseProcessing())
+      .then(this._responseProcessing())
   }
 
   changeLikeCardStatus(cardId, isLiked) {
-    return fetch (`${this._address}/cards/${cardId}/likes`, {
+    return fetch(`${this._address}/cards/${cardId}/likes`, {
       method: isLiked ? 'PUT' : 'DELETE',
       headers: {
         authorization: this._token,
         'Content-Type': 'application/json'
       },
     })
-    .then(this._responseProcessing())
+      .then(this._responseProcessing())
   }
 }
 

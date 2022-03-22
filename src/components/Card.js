@@ -1,5 +1,4 @@
 import React from 'react';
-// import { CurrentUserContext } from '../contexts/CurrentUserContext';
 
 function Card({
   card,
@@ -8,13 +7,17 @@ function Card({
   onCardLike,
   onCardDelete
 }) {
-  
+
   function handleClick() {
     onCardClick(card);
-  }  
+  }
 
   function handleLikeClick() {
     onCardLike(card);
+  }
+
+  function handleDeleteClick() {
+    onCardDelete(card);
   }
 
   const isOwn = card.owner._id === currentUser._id;
@@ -22,16 +25,16 @@ function Card({
 
   return (
     <div className="element">
-      <img className="element__photo" src = {card.link} alt = {card.name}
-      onClick={handleClick}/>
+      <img className="element__photo" src={card.link} alt={card.name}
+        onClick={handleClick} />
       <div className="element__info">
         <h2 className="element__title">{card.name}</h2>
         <div className="element__likes">
-          <button className={`element__like ${isLiked ? 'element__like_active' :''}`} type="button" aria-label="лайк" onClick={handleLikeClick}></button>
+          <button className={`element__like ${isLiked ? 'element__like_active' : ''}`} type="button" aria-label="лайк" onClick={handleLikeClick}></button>
           <p className="element__like__counter">{card.likes.length}</p>
         </div>
       </div>
-      <button className= {` ${isOwn ? 'element__basket' : ''}`} type="button" aria-label="корзина" onClick={onCardDelete}></button>
+      <button className={` ${isOwn ? 'element__basket' : ''}`} type="button" aria-label="корзина" onClick={handleDeleteClick}></button>
     </div>
   )
 }

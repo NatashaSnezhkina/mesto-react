@@ -1,50 +1,25 @@
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useContext } from 'react';
 import Card from './Card';
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
-import { CardsContext } from '../contexts/CardsContext';
-import api from '../utils/api';
 
 function Main({
   onEditProfile,
   onAddPlace,
   onEditAvatar,
   onCardClick,
-  setCards
+  cards,
+  onCardLike,
+  onCardDelete
 }) {
 
   const currentUser = useContext(CurrentUserContext);
-  const cards = useContext(CardsContext);
-
-  function handleCardLike(card) {
-    const isLiked = card.likes.some(i => i._id === currentUser._id);
-
-    api.changeLikeCardStatus(card._id, !isLiked)
-    .then((newCard) => {
-      setCards((state) => state.map((c) => c._id === card._id ? newCard : c));
-    })
-    .catch(err => {
-      console.log(`Ошибка при удалении лайка${err}`);
-    });
-  }
-
-  function handleCardDelete(card) {
-    
-    api.deleteCard(card._id)
-    .then((deletedCard) => {
-      setCards((state) => state.filter((c) => c._id !== deletedCard._id));
-    })
-    .catch(err => {
-      console.log(`Ошибка при удалении карточки${err}`);
-    })
-
-  }
 
   return (
     <main>
       <section className="profile">
         <div className="profile__avatar-container">
           <div className="profile__avatar-overlay profile__avatar-overlay_closed"></div>
-          <img className="profile__avatar" src={currentUser.avatar} onClick={onEditAvatar} alt={currentUser.name}/>
+          <img className="profile__avatar" src={currentUser.avatar} onClick={onEditAvatar} alt={currentUser.name} />
         </div>
         <div className="profile__info">
           <div className="profile__main-info">
@@ -63,10 +38,9 @@ function Main({
           card={card}
           onCardClick={onCardClick}
           currentUser={currentUser}
-          onCardLike={handleCardLike}
-          onCardDelete={handleCardDelete}
+          onCardLike={onCardLike}
+          onCardDelete={onCardDelete}
         />))}
-
       </section>
     </main>
   )

@@ -3,10 +3,10 @@ import '../index.css'
 import Header from './Header';
 import Main from './Main';
 import Footer from './Footer';
-import PopupWithForm from './PopupWithForm';
 import ImagePopup from './ImagePopup';
 import EditProfilePopup from '../components/EditProfilePopup';
 import EditAvatarPopup from '../components/EditAvatarPopup';
+import AddPlacePopup from './AddPlacePopup';
 import api from '../utils/api';
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
 import { CardsContext } from '../contexts/CardsContext';
@@ -58,15 +58,15 @@ function App() {
 
   function handleUpdateAvatar(currentUser) {
     api.sendAvatar(currentUser)
-    .then((res) => {
-      setCurrentUser(res);
-      setIsEditAvatarPopupOpen(false);
-    })
-    .catch(err => {
-      console.log(err => {
-        console.log(err);
+      .then((res) => {
+        setCurrentUser(res);
+        setIsEditAvatarPopupOpen(false);
       })
-    })
+      .catch(err => {
+        console.log(err => {
+          console.log(err);
+        })
+      })
   }
 
   useEffect(() => {
@@ -80,6 +80,22 @@ function App() {
         })
       })
   }, [])
+
+  function handleAddPlace(card) {
+    api.sendCard(card)
+      .then((newCard) => {
+        setCards(
+          [newCard, ...cards]
+        )
+        closeAllPopups();
+      }
+      )
+      .catch(err => {
+        console.log(err => {
+          console.log(err);
+        })
+      })
+  }
 
   useEffect(() => {
     api.getCards()
@@ -96,6 +112,31 @@ function App() {
       })
   }, []);
 
+  function handleCardLike(card) {
+    const isLiked = card.likes.some(i => i._id === currentUser._id);
+
+    api.changeLikeCardStatus(card._id, !isLiked)
+      .then((newCard) => {
+        setCards((state) => state.map((c) => c._id === card._id ? newCard : c));
+      })
+      .catch(err => {
+        console.log(`Ошибка при удалении лайка${err}`);
+      });
+  }
+
+  function handleCardDelete(card) {
+    api.deleteCard(card._id)
+      .then(() => {
+        setCards(cards.filter((c) => {
+          return c._id !== card._id;
+        }));
+        console.log(card);
+      })
+      .catch(err => {
+        console.log(`Ошибка при удалении карточки: ${err}`);
+      })
+
+  }
 
   return (
     <CurrentUserContext.Provider value={currentUser}>
@@ -108,7 +149,9 @@ function App() {
               onAddPlace={handleAddClick}
               onEditAvatar={handleEditAvatarClick}
               onCardClick={handleCardClick}
-              setCards={setCards}
+              cards={cards}
+              onCardLike={handleCardLike}
+              onCardDelete={handleCardDelete}
             >
             </Main>
             <Footer />
@@ -116,35 +159,27 @@ function App() {
             <EditProfilePopup
               isOpen={isEditProfilePopupOpen}
               onClose={closeAllPopups}
-              onUpdateUser={handleUpdateUser} />
+              onUpdateUser={handleUpdateUser}
+            />
 
             <EditAvatarPopup
               isOpen={isEditAvatarPopupOpen}
-              onClose={closeAllPopups} 
-              onUpdateAvatar={handleUpdateAvatar}/>
+              onClose={closeAllPopups}
+              onUpdateAvatar={handleUpdateAvatar}
+            />
 
-            <PopupWithForm
-              name="add"
-              title="Новое место"
-              buttonText="Создать"
+            <AddPlacePopup
               isOpen={isAddPlacePopupOpen}
-              onClose={closeAllPopups}>
+              onClose={closeAllPopups}
+              onAddPlace={handleAddPlace}
+            />
 
-              <input className="field field_type_title popup__input" id="popup-add__input_title"
-                type="text" name="name" placeholder="Название" required minLength="2" maxLength="30" />
-              <span id="popup-add__input_title-error" className="error"></span>
-              <input className="field field_type_link popup__input" id="popup-add__input_link"
-                type="url" name="link" placeholder="Ссылка на картинку" required />
-              <span id="popup-add__input_link-error" className="error"></span>
-            </PopupWithForm>
-
-
-            <PopupWithForm
+            {/* <PopupWithForm
               name="delete"
               title="Вы уверены?"
               buttonText="Да"
               onClose={closeAllPopups}>
-            </PopupWithForm>
+            </PopupWithForm> */}
 
             <ImagePopup
               card={selectedCard}
@@ -154,7 +189,7 @@ function App() {
           </div>
         </div >
       </CardsContext.Provider>
-    </CurrentUserContext.Provider>
+    </CurrentUserContext.Provider >
   );
 }
 
