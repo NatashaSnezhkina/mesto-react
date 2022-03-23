@@ -1,6 +1,5 @@
 import React, { useEffect, useState, useContext } from 'react';
 import PopupWithForm from './PopupWithForm';
-import { CardsContext } from '../contexts/CardsContext';
 
 function AddPlacePopup({
   onClose,
@@ -10,12 +9,16 @@ function AddPlacePopup({
 
   const [name, setName] = useState("");
   const [link, setLink] = useState("");
-  const newCard = useContext(CardsContext);
 
   useEffect(() => {
-    setName(newCard.name);
-    setLink(newCard.link);
+    setName(name);
+    setLink(link);
   }, [])
+
+  useEffect(() => {
+    setName("");
+    setLink("");
+  }, [isOpen])
 
   function handleChangeName(e) {
     setName(e.target.value);
@@ -31,7 +34,6 @@ function AddPlacePopup({
       name,
       link,
     });
-
   }
 
   return (
